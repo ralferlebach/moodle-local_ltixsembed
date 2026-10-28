@@ -15,26 +15,39 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Upgrade steps for {{COMPONENT}}.
+ * Upgrade steps for local_ltixsembed.
  *
- * Ship this file from the start: Moodle calls the function on every version bump, and the
- * validation of the Moodle plugins directory rejects a plugin without it.
+ * Release 0.2.0 (2026102502) is the first release under this component name (renamed, see docs/CHANGELOG.md); there is no
+ * upgrade path from the 0.1.0 alpha of the old component. The plugin has no tables; upgrade steps migrate stored settings.
  *
- * @package    {{COMPONENT}}
- * @copyright  {{YEAR}} {{AUTHOR}}
+ * @package    local_ltixsembed
+ * @copyright  2026 Ralf Erlebach
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
- * Upgrade the {{COMPONENT}} plugin.
+ * Upgrade the local_ltixsembed plugin.
  *
  * @param int $oldversion The version we are upgrading from.
  * @return bool
  */
-function xmldb_{{PLUGINNAME}}_upgrade($oldversion) {
-    // Add steps as "if ($oldversion < <version>) { ... upgrade_plugin_savepoint(...); }".
-    //
-    // Never declare DEFAULT="" on a CHAR NOT NULL column: XMLDB emits a debugging message for it,
-    // and moodle-plugin-ci treats any debugging message during PHPUnit initialisation as a failure.
+function xmldb_local_ltixsembed_upgrade($oldversion) {
+    if ($oldversion < 2026102700) {
+        // Release 0.3.0 (CE-02): consumer-only, provider-only and cooperative operation.
+        // Step 1: the role switches are written explicitly. 0.2.0 read a missing value as "on"; a stored value makes
+        // the operating mode of the site visible and keeps it stable whatever later defaults are.
+        foreach (['consumerenabled', 'providerenabled'] as $name) {
+            if (get_config('local_ltixsembed', $name) === false) {
+                set_config($name, 1, 'local_ltixsembed');
+            }
+        }
+        // Step 2: new setting "peerbridge". 0.2.0 treated a silent tool as a blocked frame, which made a platform that
+        // embeds a tool WITHOUT this plugin suggest the new window after every successful launch. The safe default
+        // "auto" treats silence as normal. Sites that relied on the old behaviour choose "required" (CHANGELOG 0.3.0).
+        if (get_config('local_ltixsembed', 'peerbridge') === false) {
+            set_config('peerbridge', 'auto', 'local_ltixsembed');
+        }
+        upgrade_plugin_savepoint(true, 2026102700, 'local', 'ltixsembed');
+    }
     return true;
 }

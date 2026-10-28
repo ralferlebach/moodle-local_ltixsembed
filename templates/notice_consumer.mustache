@@ -1,0 +1,64 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_ltixsembed/notice_consumer
+
+    Notice and new-window fallback shown on the platform page that embeds an LTI tool.
+
+    The state messages stay hidden until the bridge reports a state that needs them. The form is a
+    plain POST form so it works without JavaScript; the token in it is replaced by a fresh one
+    right before submitting when JavaScript is available.
+
+    Runtime state for diagnostics and the browser tests is kept in data attributes of the region:
+    data-lxs-current (detected state), data-lxs-peer (pending, bridge, silent), data-lxs-fallback (none, suggested,
+    opened), data-lxs-retries, data-lxs-rejected (number of dropped bridge messages) and data-lxs-lastreject (the validation rule
+    that dropped the last one). None of them holds personal data.
+
+    Example context (json):
+    {
+        "formaction": "https://example.com/local/ltixsembed/fallback.php",
+        "sesskey": "AbCdEf1234",
+        "cmid": 5,
+        "nonce": "v1.example",
+        "peerbridge": "auto"
+    }
+}}
+<div class="local-ltixsembed-notice mb-3" data-region="local_ltixsembed-notice" data-role="consumer"
+    data-lxs-current="pending" data-lxs-peer="pending" data-lxs-fallback="none" data-lxs-retries="0" data-lxs-rejected="0" data-lxs-lastreject=""
+    data-lxs-peerbridge="{{peerbridge}}">
+    <div class="alert alert-warning d-none" role="status" aria-live="polite" data-region="state-message">
+        <p class="mb-2 d-none" data-lxs-state="storage_unavailable">{{#str}} state_storage_unavailable_msg, local_ltixsembed {{/str}}</p>
+        <p class="mb-2 d-none" data-lxs-state="session_lost">{{#str}} state_session_lost_msg, local_ltixsembed {{/str}}</p>
+        <p class="mb-2 d-none" data-lxs-state="blocked_frame">{{#str}} state_blocked_frame_msg, local_ltixsembed {{/str}}</p>
+        <p class="mb-2 d-none" data-lxs-state="needs_user_intervention">{{#str}} state_needs_user_intervention_msg, local_ltixsembed {{/str}}</p>
+        <p class="mb-2">{{#str}} consumer_whattodo, local_ltixsembed {{/str}}</p>
+        <p class="small mb-0">{{#str}} privacynote, local_ltixsembed {{/str}}</p>
+    </div>
+    <details data-region="manual-fallback">
+        <summary>{{#str}} manualfallback_summary, local_ltixsembed {{/str}}</summary>
+        <form method="post" action="{{formaction}}" target="_blank" rel="noopener" class="mt-2" data-region="fallback-form">
+            <input type="hidden" name="sesskey" value="{{sesskey}}">
+            <input type="hidden" name="cmid" value="{{cmid}}">
+            <input type="hidden" name="nonce" value="{{nonce}}">
+            <input type="hidden" name="reason" value="manual">
+            <input type="hidden" name="cid" value="">
+            <input type="hidden" name="peer" value="none">
+            <p class="mb-2">{{#str}} manualfallback_help, local_ltixsembed {{/str}}</p>
+            <button type="submit" class="btn btn-secondary">{{#str}} manualfallback_button, local_ltixsembed {{/str}}</button>
+        </form>
+    </details>
+</div>

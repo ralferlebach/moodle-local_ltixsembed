@@ -1,0 +1,17 @@
+{
+  "name": "moodle-local_ltixsembed",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "description": "Build and unit-test tooling for the AMD modules of local_ltixsembed.",
+  "scripts": {
+    "build:amd": "node tools/amd_build.cjs",
+    "test": "node --test tests/js/*.test.mjs"
+  },
+  "devDependencies": {
+    "@babel/core": "^8.0.0",
+    "@babel/plugin-transform-modules-amd": "^8.0.0",
+    "@babel/preset-env": "^8.0.0",
+    "terser": "^5.36.0"
+  }
+}

@@ -1,0 +1,65 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_ltixsembed/diagnostics
+
+    Browser capability test. The values are filled in by the AMD module local_ltixsembed/diagnostics.
+
+    Example context (json):
+    {
+        "mode": "both",
+        "modelabel": "Platform side and tool side enabled",
+        "auditurl": "https://example.com/local/ltixsembed/audit.php",
+        "rows": [
+            {"key": "cookie", "label": "Cookie write and read-back", "value": "testing..."}
+        ]
+    }
+}}
+<div data-region="local_ltixsembed-diagnostics">
+    <p>{{#str}} diag_intro, local_ltixsembed {{/str}}</p>
+    <p data-region="mode" data-lxs-mode="{{mode}}"><strong>{{#str}} diag_mode, local_ltixsembed {{/str}}:</strong> {{modelabel}}<br>
+        <span class="small">{{#str}} diag_mode_help, local_ltixsembed {{/str}}</span></p>
+    <noscript><div class="alert alert-warning">{{#str}} diag_noscript, local_ltixsembed {{/str}}</div></noscript>
+    <div class="alert alert-info" role="status" aria-live="polite" data-region="result">
+        <strong>{{#str}} diag_result, local_ltixsembed {{/str}}:</strong>
+        <span data-region="state">{{#str}} value_pending, local_ltixsembed {{/str}}</span><br>
+        <strong>{{#str}} diag_recommendation, local_ltixsembed {{/str}}:</strong>
+        <span data-region="recommendation">{{#str}} value_pending, local_ltixsembed {{/str}}</span>
+    </div>
+    <table class="table table-sm generaltable">
+        <thead>
+            <tr>
+                <th scope="col">{{#str}} diag_feature, local_ltixsembed {{/str}}</th>
+                <th scope="col">{{#str}} diag_value, local_ltixsembed {{/str}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#rows}}
+            <tr>
+                <th scope="row">{{label}}</th>
+                <td data-feature="{{key}}">{{value}}</td>
+            </tr>
+            {{/rows}}
+        </tbody>
+    </table>
+    <p class="d-none" data-region="request-access">
+        <button type="button" class="btn btn-secondary" data-action="request-access">{{#str}} diag_requestaccess, local_ltixsembed {{/str}}</button>
+        <span class="small d-block">{{#str}} diag_requestaccess_help, local_ltixsembed {{/str}}</span>
+    </p>
+    <p class="small">{{#str}} privacynote, local_ltixsembed {{/str}}</p>
+    <p><a href="{{auditurl}}">{{#str}} page_audit, local_ltixsembed {{/str}}</a></p>
+</div>

@@ -15,25 +15,23 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Capability definitions for {{COMPONENT}}.
+ * Capability definitions for local_ltixsembed.
  *
- * @package    {{COMPONENT}}
- * @copyright  {{YEAR}} {{AUTHOR}}
+ * @package    local_ltixsembed
+ * @copyright  2026 Ralf Erlebach
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-// Grant capabilities to archetypes deliberately and check them in the context the action belongs
-// to. A course-level decision asked in the system context silently ignores role switching,
-// because Moodle suspends the administrator bypass only for the context being switched.
 $capabilities = [
-    '{{PLUGINTYPE}}/{{PLUGINNAME}}:view' => [
+    // The diagnostics page and the configuration audit reveal how the site is configured.
+    'local/ltixsembed:viewdiagnostics' => [
         'captype' => 'read',
-        'contextlevel' => CONTEXT_COURSE,
+        'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => [
-            'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW,
         ],
+        'riskbitmask' => RISK_CONFIG,
     ],
 ];

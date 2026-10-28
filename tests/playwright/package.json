@@ -1,15 +1,17 @@
 {
-  "name": "{{COMPONENT}}-playwright",
+  "name": "local_ltixsembed-playwright",
   "version": "1.0.0",
   "private": true,
-  "description": "Browser smoke tests for {{COMPONENT}} against a live Moodle site.",
+  "description": "Browser tests for local_ltixsembed: single-site administration/fallback checks and the two-site embedding suite.",
   "scripts": {
     "test": "playwright test",
+    "test:single": "playwright test single-site.spec.js",
+    "test:two-site": "playwright test two-site-bridge.spec.js",
     "install-browsers": "playwright install --with-deps chromium",
-    "test:a11y": "playwright test accessibility.spec.js"
+    "test:modes": "playwright test modes.spec.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.47.0",
-    "@axe-core/playwright": "^4.10.0"
+    "axe-core": "^4.10.2"
   }
 }
